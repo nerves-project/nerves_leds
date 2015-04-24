@@ -7,10 +7,12 @@ defmodule Leds do
 		Leds.set power: true, alert: false, network: :fastblink
 
   """
-  
+
+  @sys_leds_path "/sys/class/leds"
+
   @name_map  Application.get_env :leds, :name_map, []
 
-  @state_map Application.get_env :leds, :state_map, [ 
+  @state_map Application.get_env :leds, :state_map, [
 		true:  [ brightness: "1" ],
     false: [ brightness: "0" ],
 		slowblink: [ trigger: "timer", delay_off: "250", delay_on: "250" ],
@@ -21,10 +23,10 @@ defmodule Leds do
 
   def initialize do
     :ets.new :led_alive_processes, [:set, :public, :named_table]
-  end     
+  end
 
   defp led_path(led, attribute) do
-    Path.join "/sys/class/leds/#{led}/", attribute
+    Path.join  @sys_leds_path <> "#{led}/", attribute
   end
 
   # if the value of a defined LED is a function, then call the function
@@ -57,23 +59,23 @@ defmodule Leds do
 
   @doc """
   Keeps an led on for the specified amount of time - 5 secs default
-  
+
   Written in such a way that you can call alive from multiple processes,
   and they will overlap - i.e. each call resets the timer to another time
   period.  If the specified timeout is different, the last timout called
   is the timeout that is used.   When the timeout expires (with no other
   alive call for that led) the led is extinguished.
-  
-  The following example shows turning on an led labelled :activity.  The 
+
+  The following example shows turning on an led labelled :activity.  The
   call must be executed every 2 seconds or more to keep the activity led
   lit:
-  
+
       Leds.alive :activity, 2000
 
   WARNING: This is a moderate overhead function, and shouldn't be called
            every millisecond.  It's intended for longer intervals.  This
            could be fixed.  Pull requests welcomed.
-  """  
+  """
   def alive(led, ms \\ 5000) do
     pinger_pid = :erlang.spawn fn() -> hold(led, ms) end
     case :ets.lookup(:led_alive_processes, led) do
@@ -91,4 +93,19 @@ defmodule Leds do
     Enum.each settings, &(set_keyed_state(&1))
   end
 
+  @doc """
+  List the available leds using the LED subsystem.
+
+  ## Examples
+  ```
+  iex> Leds.list
+  {:ok, [:led0, :led1]}
+  ```
+  """
+  def list do
+    case File.ls(@sys_leds_path) do
+      {:ok, leds} -> {:ok, Enum.map(leds, fn(s) -> String.to_atom(s) end)}
+      {:error, _} -> {:ok, []}
+    end
+  end
 end
