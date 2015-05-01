@@ -92,20 +92,4 @@ defmodule Leds do
   def set(settings) do
     Enum.each settings, &(set_keyed_state(&1))
   end
-
-  @doc """
-  List the available leds using the LED subsystem.
-
-  ## Examples
-  ```
-  iex> Leds.list
-  {:ok, [:led0, :led1]}
-  ```
-  """
-  def list do
-    case File.ls(@sys_leds_path) do
-      {:ok, leds} -> {:ok, Enum.map(leds, fn(s) -> String.to_atom(s) end)}
-      {:error, _} -> {:ok, []}
-    end
-  end
 end
