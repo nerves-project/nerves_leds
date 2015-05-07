@@ -8,7 +8,7 @@ defmodule Leds do
 
   """
 
-  @sys_leds_path "/sys/class/leds"
+  @sys_leds_path "/sys/class/leds/"
 
   @name_map  Application.get_env :leds, :name_map, []
 
