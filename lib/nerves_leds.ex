@@ -2,10 +2,14 @@ defmodule Nerves.Leds do
 
   @moduledoc """
   Handles LED blinking/handling in a configurable way, providing an
-  easy-to use interface to setting LEDs defined in /sys/class/leds:
+  easy-to use interface to setting LEDs defined in `/sys/class/leds`.
   
-    alias Nerves.Leds
-		Leds.set power: true, alert: false, network: :fastblink
+  A simple example:
+  
+  ```
+  alias Nerves.Leds
+	Leds.set power: true, alert: false, network: :fastblink
+  ```
 
   """
 
@@ -22,6 +26,7 @@ defmodule Nerves.Leds do
 		heartbeat: [ trigger: "heartbeat" ]
   ]
 
+  @doc "Must be called once (no parameters) at startup to setup associations"
   def initialize do
     :ets.new :led_alive_processes, [:set, :public, :named_table]
   end
@@ -70,14 +75,16 @@ defmodule Nerves.Leds do
   The following example shows turning on an led labelled :activity.  The
   call must be executed every 2 seconds or more to keep the activity led
   lit:
-
-      alias Nerves.Leds
-      ...
-      Leds.alive :activity, 2000
-
+  
+  ```
+  alias Nerves.Leds
+  ...
+  Leds.alive :activity, 2000
+  ```
+  
   WARNING: This is a moderate overhead function, and shouldn't be called
-           every millisecond.  It's intended for longer intervals.  This
-           could be fixed.  Pull requests welcomed.
+  every millisecond.  It's intended for longer intervals. Pull requests
+  encouraged!
   """
   def alive(led, ms \\ 5000) do
     pinger_pid = :erlang.spawn fn() -> hold(led, ms) end
@@ -89,8 +96,11 @@ defmodule Nerves.Leds do
   end
 
   @doc """
-  Set led status.  Settings is an enumerable k/v.
-  Like this: Leds.set power: true
+  Set led status.  Settings is an enumerable k/v.  Like this: 
+
+  ```
+  Leds.set power: true
+  ```
   """
   def set(settings) do
     Enum.each settings, &(set_keyed_state(&1))

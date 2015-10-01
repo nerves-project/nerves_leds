@@ -17,12 +17,12 @@ defmodule NervesLeds.Mixfile do
   def application, do: [ ]
 
   defp deps, do: [
-    {:earmark, "~> 0.1", only: :docs},
-    {:ex_doc, "~> 0.8", only: :docs}
+    {:earmark, "~> 0.1", only: :dev},
+    {:ex_doc, "~> 0.8", only: :dev}
   ]
 
   defp package, do: [
-    contributors: ["Garth Hitchens", "Chris Dutton"],
+    maintainers: ["Garth Hitchens", "Chris Dutton"],
     licenses: ["MIT"],
     links: %{github: "https://github.com/nerves-project/nerves_leds"},
     files: ~w(lib config) ++
