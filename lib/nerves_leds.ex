@@ -1,9 +1,10 @@
-defmodule Leds do
+defmodule Nerves.Leds do
 
   @moduledoc """
   Handles LED blinking/handling in a configurable way, providing an
   easy-to use interface to setting LEDs defined in /sys/class/leds:
-
+  
+    alias Nerves.Leds
 		Leds.set power: true, alert: false, network: :fastblink
 
   """
@@ -70,6 +71,8 @@ defmodule Leds do
   call must be executed every 2 seconds or more to keep the activity led
   lit:
 
+      alias Nerves.Leds
+      ...
       Leds.alive :activity, 2000
 
   WARNING: This is a moderate overhead function, and shouldn't be called
@@ -92,4 +95,5 @@ defmodule Leds do
   def set(settings) do
     Enum.each settings, &(set_keyed_state(&1))
   end
+
 end

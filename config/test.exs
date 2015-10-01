@@ -4,7 +4,7 @@ use Mix.Config
 # behavior for testing rather than using sys/class/leds
 
 config :leds, name_map: [
-	test_led: &LedsTest.on_led_write/1
+	test_led: &Nerves.LedsTest.on_led_write/1
 ]
 
 # redefine led state map to be default, but with an additional custom 

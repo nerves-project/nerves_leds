@@ -1,5 +1,5 @@
-Leds
-====
+Nerves.Leds
+===========
 
 A simple module to make it easy to control LEDs.  Works on any linux system with /sys/class/leds.
 
@@ -16,13 +16,17 @@ An example configuration for the Alix 2D boards:
 		alert:     "alix:3"
 	]
 
+It's customary to bring the Nerves.Leds module into scope as "Leds", as follows:
+
+    alias Nerves.Leds
+
 Now, in our application code, we can easily use an LED:
 
-	Leds.set power: true
+    Leds.set power: true
 
 We can even set multiple states for multiple LEDs at once:
 
-	Leds.set connected: false, alert: :fastblink
+    Leds.set connected: false, alert: :fastblink
 
 ### LEDs and Keep-Alive
 

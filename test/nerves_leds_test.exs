@@ -1,6 +1,7 @@
-defmodule LedsTest do
+defmodule Nerves.LedsTest do
 
   use ExUnit.Case
+  alias Nerves.Leds
   
 	# callback for the test led that simply sets keys in the process dictionary
   # where we can assert them.  This works because the LED module does
@@ -15,7 +16,7 @@ defmodule LedsTest do
 		assert led(:trigger) == "none"
   end
 
-  test "turn off an led" do
+  test "turn off an LED" do
 		Leds.set test_led: false
 	  assert led(:brightness) == "0"
 		assert led(:trigger) == "none"
