@@ -22,7 +22,7 @@ defmodule NervesLeds.Mixfile do
   ]
 
   defp package, do: [
-    contributors: ["Garth Hitchens"],
+    contributors: ["Garth Hitchens", "Chris Dutton"],
     licenses: ["MIT"],
     links: %{github: "https://github.com/nerves-project/nerves_leds"},
     files: ~w(lib config) ++
