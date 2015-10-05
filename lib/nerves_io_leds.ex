@@ -1,23 +1,15 @@
-defmodule Nerves.Leds do
+defmodule Nerves.IO.Leds do
 
   @moduledoc """
   Handles LED blinking/handling in a configurable way, providing an
   easy-to use interface to setting LEDs defined in `/sys/class/leds`.
   
-  A simple example:
-  
-  ```
-  alias Nerves.Leds
-	Leds.set power: true, alert: false, network: :fastblink
-  ```
-
+  See README.md for overview information and configuration.
   """
 
-  @sys_leds_path "/sys/class/leds/"
-
-  @name_map  Application.get_env :leds, :name_map, []
-
-  @state_map Application.get_env :leds, :state_map, [
+	@app :nerves_io_leds
+	
+	@predefined_states [
 		true:  [ brightness: "1" ],
     false: [ brightness: "0" ],
 		slowblink: [ trigger: "timer", delay_off: "250", delay_on: "250" ],
@@ -26,7 +18,13 @@ defmodule Nerves.Leds do
 		heartbeat: [ trigger: "heartbeat" ]
   ]
 
-  @doc "Must be called once (no parameters) at startup to setup associations"
+  @sys_leds_path "/sys/class/leds/"
+
+  @led_names  Application.get_env(@app, :names, [])
+  @led_states Dict.merge(Application.get_env(@app, :states, []),
+												@predefined_states)
+
+	@doc "Must be called once (no parameters) at startup to setup associations"
   def initialize do
     :ets.new :led_alive_processes, [:set, :public, :named_table]
   end
@@ -52,8 +50,8 @@ defmodule Nerves.Leds do
   end
 
   defp set_keyed_state({key, val}) do
-    raw_led = Dict.get @name_map, key
-    unless is_list(val), do: val = Dict.get @state_map, val
+    raw_led = Dict.get @led_names, key
+    unless is_list(val), do: val = Dict.get @led_states, val
     set_raw_state raw_led, val
   end
 
@@ -77,7 +75,7 @@ defmodule Nerves.Leds do
   lit:
   
   ```
-  alias Nerves.Leds
+  alias Nerves.IO.Leds
   ...
   Leds.alive :activity, 2000
   ```

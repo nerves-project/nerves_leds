@@ -1,7 +1,7 @@
-defmodule Nerves.LedsTest do
+defmodule Nerves.IO.LedsTest do
 
   use ExUnit.Case
-  alias Nerves.Leds
+  alias Nerves.IO.Leds
   
 	# callback for the test led that simply sets keys in the process dictionary
   # where we can assert them.  This works because the LED module does

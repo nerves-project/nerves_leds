@@ -1,63 +1,69 @@
-Nerves.Leds
-===========
+Nerves.IO.Leds
+==============
 
-A simple module to make it easy to control LEDs.  Works on any linux system with /sys/class/leds.
+Simple control of LEDs.  Designed for use with [nerves](http://nerves.io/), but works on any distribution of linux that supports `/sys/class/leds`.
 
-### Basic Configuration & Usage
+## Configuration
 
-Assign a friendly name to each LED that makes sense for your application.
+Use config.exs to create a friendly name that maps to an entry in /sys/class/leds that make sense for your application.
+
 An example configuration for the Alix 2D boards:
 
 	# in your app's config/config.exs: 
-
-	config :leds, name_map: [
+	config :nerves_io_leds, name_map: [
 		power:     "alix:1", 
 		connected: "alix:2",
 		alert:     "alix:3"
 	]
 
+## Usage
+
 It's customary to bring the Nerves.Leds module into scope as "Leds", as follows:
 
-    alias Nerves.Leds
+    alias Nerves.IO.Leds
 
-Now, in our application code, we can easily use an LED:
+Now, we can turn an LED on using the name we configured:
 
     Leds.set power: true
 
+Or make it blink slowly:
+
+    Leds.set power: slowblink
+
 We can even set multiple states for multiple LEDs at once:
 
-    Leds.set connected: false, alert: :fastblink
+Leds.set connected: false, alert: :fastblink
 
-### LEDs and Keep-Alive
+## Built-In LED States
 
-There's also built-in handling for the common scenario where we want to keep an LED on as long as something happens once in a while (like keeping a connection light lit as data keeps coming).
+In addition to `true` (on) and `false` (off) the following atoms have built-in meaning to the LEDs module.
+
+- `:slowblink` - turns on and off slowly (about twice a second)
+- `:fastblink` - turns on and off rapidly (about 7.5 times a second)
+- `:slowwink` - mostly on, but "winks off" once every second or so
+- `:hearbeat` - a heartbeat pattern 
+
+## Keep-Alive LEDs
+
+One common scenario in embedded programming involves keeping an LED on as long as something happens once in a while (like keeping a connection light lit as data keeps coming).  Do it like this:
 
 	Leds.alive :connected, 2000
 
-Normally, this will illuminate the LED for 2 seconds, but by repeating the above call within 2 seconds, the LED is kept on indefinitely.
+This will illuminate the LED for 2 seconds, after which it will extinguish.  By repeating the above call within 2 seconds, the LED is kept on indefinitely.
 
-### Custom LED states
+## Customizing LED states
 
-LEDs have several states predefined, but you can override the default set of states in config.exs:
+The standard LED states are defined as `@predefined_states` near the top of `lib/nerves_io_leds.ex`.  You can change or add to them using config.exs as follows:
 
-    # in your app's config/config.exs:
+	config :nerves_io_leds, :state, [ 
+		fastblink: [ trigger: "timer", delay_off: "40", delay_on: 30" ],
+		blip: [ trigger: "timer", delay_off: "1000", delay_on: "100" ]
+	]
 
-	config :leds, :state_map, [
-		true:      [ brightness: "1" ],
-		false:     [ brightness: "0" ],
-		slowblink: [ trigger: "timer", delay_off: "250", delay_on: "250" ],
-		fastblink: [ trigger: "timer", delay_off: "80", delay_on: "50" ],
-		slowwink:  [ trigger: "timer", delay_on: "1000", delay_off: "100" ],
-		heartbeat: [ trigger: "heartbeat" ]
-    ]
+See the linux documentation on sys/class/leds to understand the meaning of trigger, delay, brightness, and other settings.
 
-The above example shows a custom set of states (which happen to be the default settings).  See the linux documentation on sys/class/leds to understand the meaning of trigger, delay, and brightness levels.
-
-### Limitations, Areas for Improvement
+## Limitations, Areas for Improvement
 
 - linux only, requires /sys/class/leds
 - most but not all /sys/class/leds features are currently implemented
-- must currently redefine all states upon customization (can't add one)
 - tests don't cover keepalive functionality yet
-
-
