@@ -1,6 +1,8 @@
 Nerves.IO.Leds
 ==============
 
+[![Build Status](https://travis-ci.org/nerves-project/nerves_io_leds.svg?branch=master)](https://travis-ci.org/nerves-project/nerves_io_leds)
+
 Simple control of LEDs.  Designed for use with [nerves](http://nerves.io/), but works on any distribution of linux that supports `/sys/class/leds`.
 
 ## Configuration
@@ -9,9 +11,9 @@ Use config.exs to create a friendly name that maps to an entry in /sys/class/led
 
 An example configuration for the Alix 2D boards:
 
-	# in your app's config/config.exs: 
+	# in your app's config/config.exs:
 	config :nerves_io_leds, name_map: [
-		power:     "alix:1", 
+		power:     "alix:1",
 		connected: "alix:2",
 		alert:     "alix:3"
 	]
@@ -41,7 +43,7 @@ In addition to `true` (on) and `false` (off) the following atoms have built-in m
 - `:slowblink` - turns on and off slowly (about twice a second)
 - `:fastblink` - turns on and off rapidly (about 7.5 times a second)
 - `:slowwink` - mostly on, but "winks off" once every second or so
-- `:hearbeat` - a heartbeat pattern 
+- `:hearbeat` - a heartbeat pattern
 
 ## Keep-Alive LEDs
 
@@ -55,7 +57,7 @@ This will illuminate the LED for 2 seconds, after which it will extinguish.  By 
 
 The standard LED states are defined as `@predefined_states` near the top of `lib/nerves_io_leds.ex`.  You can change or add to them using config.exs as follows:
 
-	config :nerves_io_leds, :state, [ 
+	config :nerves_io_leds, :state, [
 		fastblink: [ trigger: "timer", delay_off: "40", delay_on: 30" ],
 		blip: [ trigger: "timer", delay_off: "1000", delay_on: "100" ]
 	]
