@@ -1,30 +1,29 @@
-defmodule Nerves.IO.Leds do
+defmodule Nerves.IO.Led do
 
   @moduledoc """
   Handles LED blinking/handling in a configurable way, providing an
   easy-to use interface to setting LEDs defined in `/sys/class/leds`.
-  
+
   See README.md for overview information and configuration.
   """
 
-	@app :nerves_io_leds
-	
-	@predefined_states [
-		true:  [ brightness: "1" ],
-    false: [ brightness: "0" ],
-		slowblink: [ trigger: "timer", delay_off: "250", delay_on: "250" ],
-		fastblink: [ trigger: "timer", delay_off: "80", delay_on: "50" ],
-		slowwink:  [ trigger: "timer", delay_on: "1000", delay_off: "100" ],
-		heartbeat: [ trigger: "heartbeat" ]
+  @app :nerves_io_led
+
+  @predefined_states [
+    true:  [ brightness: 1 ],
+    false: [ brightness: 0 ],
+    slowblink: [ trigger: "timer", delay_off: 250, delay_on: 250 ],
+    fastblink: [ trigger: "timer", delay_off: 80, delay_on: 50 ],
+    slowwink:  [ trigger: "timer", delay_on: 1000, delay_off: 100 ],
+    heartbeat: [ trigger: "heartbeat" ]
   ]
 
   @sys_leds_path "/sys/class/leds/"
 
   @led_names  Application.get_env(@app, :names, [])
-  @led_states Dict.merge(Application.get_env(@app, :states, []),
-												@predefined_states)
+  @led_states Dict.merge(Application.get_env(@app, :states, []), @predefined_states)
 
-	@doc "Must be called once (no parameters) at startup to setup associations"
+  @doc "Must be called once (no parameters) at startup to setup associations"
   def initialize do
     :ets.new :led_alive_processes, [:set, :public, :named_table]
   end
@@ -36,11 +35,11 @@ defmodule Nerves.IO.Leds do
   # if the value of a defined LED is a function, then call the function
   # with the key/value arguments   Primarly used for testing
   defp write(led_fn, {key, value}) when is_function(led_fn) do
-		led_fn.({key, value})
+    led_fn.({key, value})
   end
   defp write(led, {key, value}) when is_binary(led) do
     if is_atom(key), do: key = :erlang.atom_to_binary(key, :utf8)
-    File.write(led_path(led, key), value)
+    File.write(led_path(led, key), to_string(value))
   end
 
   defp set_raw_state(led, settings) do
@@ -73,13 +72,13 @@ defmodule Nerves.IO.Leds do
   The following example shows turning on an led labelled :activity.  The
   call must be executed every 2 seconds or more to keep the activity led
   lit:
-  
+
   ```
-  alias Nerves.IO.Leds
+  alias Nerves.IO.Led
   ...
-  Leds.alive :activity, 2000
+  Led.alive :activity, 2000
   ```
-  
+
   WARNING: This is a moderate overhead function, and shouldn't be called
   every millisecond.  It's intended for longer intervals. Pull requests
   encouraged!
@@ -94,10 +93,10 @@ defmodule Nerves.IO.Leds do
   end
 
   @doc """
-  Set led status.  Settings is an enumerable k/v.  Like this: 
+  Set led status.  Settings is an enumerable k/v.  Like this:
 
   ```
-  Leds.set power: true
+  Led.set power: true
   ```
   """
   def set(settings) do
