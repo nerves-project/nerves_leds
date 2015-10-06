@@ -21,8 +21,7 @@ defmodule Nerves.IO.Leds do
   @sys_leds_path "/sys/class/leds/"
 
   @led_names  Application.get_env(@app, :names, [])
-  @led_states Dict.merge(Application.get_env(@app, :states, []),
-  @predefined_states)
+  @led_states Dict.merge(Application.get_env(@app, :states, []), @predefined_states)
 
   @doc "Must be called once (no parameters) at startup to setup associations"
   def initialize do
