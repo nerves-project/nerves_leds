@@ -7,24 +7,24 @@ defmodule Nerves.IO.Leds do
   See README.md for overview information and configuration.
   """
 
-	@app :nerves_io_leds
+  @app :nerves_io_leds
 
-	@predefined_states [
-		true:  [ brightness: 1 ],
+  @predefined_states [
+    true:  [ brightness: 1 ],
     false: [ brightness: 0 ],
-		slowblink: [ trigger: "timer", delay_off: 250, delay_on: 250 ],
-		fastblink: [ trigger: "timer", delay_off: 80, delay_on: 50 ],
-		slowwink:  [ trigger: "timer", delay_on: 1000, delay_off: 100 ],
-		heartbeat: [ trigger: "heartbeat" ]
+    slowblink: [ trigger: "timer", delay_off: 250, delay_on: 250 ],
+    fastblink: [ trigger: "timer", delay_off: 80, delay_on: 50 ],
+    slowwink:  [ trigger: "timer", delay_on: 1000, delay_off: 100 ],
+    heartbeat: [ trigger: "heartbeat" ]
   ]
 
   @sys_leds_path "/sys/class/leds/"
 
   @led_names  Application.get_env(@app, :names, [])
   @led_states Dict.merge(Application.get_env(@app, :states, []),
-												@predefined_states)
+  @predefined_states)
 
-	@doc "Must be called once (no parameters) at startup to setup associations"
+  @doc "Must be called once (no parameters) at startup to setup associations"
   def initialize do
     :ets.new :led_alive_processes, [:set, :public, :named_table]
   end
@@ -36,7 +36,7 @@ defmodule Nerves.IO.Leds do
   # if the value of a defined LED is a function, then call the function
   # with the key/value arguments   Primarly used for testing
   defp write(led_fn, {key, value}) when is_function(led_fn) do
-		led_fn.({key, value})
+    led_fn.({key, value})
   end
   defp write(led, {key, value}) when is_binary(led) do
     if is_atom(key), do: key = :erlang.atom_to_binary(key, :utf8)
