@@ -3,18 +3,18 @@ defmodule Nerves.IO.Leds do
   @moduledoc """
   Handles LED blinking/handling in a configurable way, providing an
   easy-to use interface to setting LEDs defined in `/sys/class/leds`.
-  
+
   See README.md for overview information and configuration.
   """
 
 	@app :nerves_io_leds
-	
+
 	@predefined_states [
-		true:  [ brightness: "1" ],
-    false: [ brightness: "0" ],
-		slowblink: [ trigger: "timer", delay_off: "250", delay_on: "250" ],
-		fastblink: [ trigger: "timer", delay_off: "80", delay_on: "50" ],
-		slowwink:  [ trigger: "timer", delay_on: "1000", delay_off: "100" ],
+		true:  [ brightness: 1 ],
+    false: [ brightness: 0 ],
+		slowblink: [ trigger: "timer", delay_off: 250, delay_on: 250 ],
+		fastblink: [ trigger: "timer", delay_off: 80, delay_on: 50 ],
+		slowwink:  [ trigger: "timer", delay_on: 1000, delay_off: 100 ],
 		heartbeat: [ trigger: "heartbeat" ]
   ]
 
@@ -40,7 +40,7 @@ defmodule Nerves.IO.Leds do
   end
   defp write(led, {key, value}) when is_binary(led) do
     if is_atom(key), do: key = :erlang.atom_to_binary(key, :utf8)
-    File.write(led_path(led, key), value)
+    File.write(led_path(led, key), to_string(value))
   end
 
   defp set_raw_state(led, settings) do
@@ -73,13 +73,13 @@ defmodule Nerves.IO.Leds do
   The following example shows turning on an led labelled :activity.  The
   call must be executed every 2 seconds or more to keep the activity led
   lit:
-  
+
   ```
   alias Nerves.IO.Leds
   ...
   Leds.alive :activity, 2000
   ```
-  
+
   WARNING: This is a moderate overhead function, and shouldn't be called
   every millisecond.  It's intended for longer intervals. Pull requests
   encouraged!
@@ -94,7 +94,7 @@ defmodule Nerves.IO.Leds do
   end
 
   @doc """
-  Set led status.  Settings is an enumerable k/v.  Like this: 
+  Set led status.  Settings is an enumerable k/v.  Like this:
 
   ```
   Leds.set power: true
