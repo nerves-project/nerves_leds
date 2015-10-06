@@ -3,14 +3,14 @@ use Mix.Config
 # uses a special callback form for an led that can be used to define special
 # behavior for testing rather than using sys/class/leds
 
-config :nerves_io_leds, names: [
-	test_led: &Nerves.IO.LedsTest.on_led_write/1
+config :nerves_io_led, names: [
+	test_led: &Nerves.IO.LedTest.on_led_write/1
 ]
 
 # redefine led state map to be default, but with an additional custom
 # state to handle test_states
 
-config :nerves_io_leds, states: [
+config :nerves_io_led, states: [
 		true:  [ brightness: 1 ],
     false: [ brightness: 0 ],
 		slowblink: [ trigger: "timer", delay_off: 250, delay_on: 250 ],

@@ -1,4 +1,4 @@
-defmodule Nerves.IO.Leds do
+defmodule Nerves.IO.Led do
 
   @moduledoc """
   Handles LED blinking/handling in a configurable way, providing an
@@ -7,7 +7,7 @@ defmodule Nerves.IO.Leds do
   See README.md for overview information and configuration.
   """
 
-  @app :nerves_io_leds
+  @app :nerves_io_led
 
   @predefined_states [
     true:  [ brightness: 1 ],
@@ -74,9 +74,9 @@ defmodule Nerves.IO.Leds do
   lit:
 
   ```
-  alias Nerves.IO.Leds
+  alias Nerves.IO.Led
   ...
-  Leds.alive :activity, 2000
+  Led.alive :activity, 2000
   ```
 
   WARNING: This is a moderate overhead function, and shouldn't be called
@@ -96,7 +96,7 @@ defmodule Nerves.IO.Leds do
   Set led status.  Settings is an enumerable k/v.  Like this:
 
   ```
-  Leds.set power: true
+  Led.set power: true
   ```
   """
   def set(settings) do
