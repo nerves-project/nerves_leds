@@ -5,7 +5,7 @@ Simple control of LEDs.  Designed for use with [nerves](http://nerves.io/), but 
 
 ## Configuration
 
-Use config.exs to create a friendly name that maps to an entry in /sys/class/leds that make sense for your application.
+Use config.exs to create a friendly name that maps to an entry in `/sys/class/leds` that make sense for your application.
 
 An example configuration for the Alix 2D boards:
 ```elixir
@@ -27,13 +27,13 @@ Now, we can turn an LED on using the name we configured:
 Leds.set power: true
 ```
 Or make it blink slowly:
-
-    Leds.set power: :slowblink
-
+```elixir
+Leds.set power: :slowblink
+```
 We can even set multiple states for multiple LEDs at once:
-
+```elixir
 Leds.set connected: false, alert: :fastblink
-
+```
 ## Built-In LED States
 
 In addition to `true` (on) and `false` (off) the following atoms have built-in meaning to the LEDs module.
@@ -60,10 +60,10 @@ config :nerves_io_leds, :state, [
 	blip: [ trigger: "timer", delay_off: 1000, delay_on: 100 ]
 ]
 ```
-See the linux documentation on sys/class/leds to understand the meaning of trigger, delay, brightness, and other settings.
+See the linux documentation on `sys/class/leds` to understand the meaning of trigger, delay, brightness, and other settings.
 
 ## Limitations, Areas for Improvement
 
-- linux only, requires /sys/class/leds
-- most but not all /sys/class/leds features are currently implemented
+- linux only, requires `/sys/class/leds`
+- most but not all ``/sys/class/leds` features are currently implemented
 - tests don't cover keepalive functionality yet
