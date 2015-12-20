@@ -49,7 +49,14 @@ defmodule Nerves.IO.Led do
   end
 
   defp set_keyed_state({key, val}) do
-    raw_led = Dict.get @led_names, key
+    raw_led = case (Dict.get @led_names, key) do
+      nil ->
+        raise ArgumentError, """
+        Attempt to set unknown led key. Check your led names in config.exs,
+        or maybe you forgot to mix deps.compile leds after change?
+        """
+      led -> led
+    end
     unless is_list(val), do: val = Dict.get @led_states, val
     set_raw_state raw_led, val
   end
