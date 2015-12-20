@@ -12,7 +12,7 @@ An example configuration for the Alix 2D boards:
 
 ```elixir
 # in your app's config/config.exs:
-config :nerves_io_led, name_map: [
+config :nerves_io_led, names: [
 	power:     "alix:1",
 	connected: "alix:2",
 	alert:     "alix:3"
