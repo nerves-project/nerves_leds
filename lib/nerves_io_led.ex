@@ -45,7 +45,7 @@ defmodule Nerves.IO.Led do
   defp set_raw_state(led, settings) do
     {trigger, settings} = Dict.pop settings, :trigger, "none"
     write(led, {:trigger, trigger})
-    Enum.each settings, &(led |> write &1)
+    Enum.each settings, &(led |> write(&1))
   end
 
   defp set_keyed_state({key, val}) do
