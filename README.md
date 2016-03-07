@@ -2,7 +2,7 @@ Nerves.IO.Led
 ==============
 [![Build Status](https://travis-ci.org/nerves-project/nerves_io_led.svg?branch=master)](https://travis-ci.org/nerves-project/nerves_io_led)
 
-Simple control of Led.  Designed for use with [nerves](http://nerves.io/), but works on any distribution of linux that supports `/sys/class/leds`.
+Simple control of LEDs.  Designed for use with [nerves](http://nerves-project.org/), but works on any distribution of Linux that supports `/sys/class/leds`.
 
 ## Configuration
 
@@ -56,18 +56,18 @@ This will illuminate the LED for 2 seconds, after which it will extinguish.  By 
 
 ## Customizing LED states
 
-The standard LED states are defined as `@predefined_states` near the top of `lib/nerves_io_Led.ex`.  You can change or add to them using config.exs as follows:
+The standard LED states are defined as `@predefined_states` near the top of `lib/nerves_io_led.ex`.  You can change or add to them using config.exs as follows:
 ```elixir
 config :nerves_io_led, :state, [
 	fastblink: [ trigger: "timer", delay_off: 40, delay_on: 30 ],
 	blip: [ trigger: "timer", delay_off: 1000, delay_on: 100 ]
 ]
 ```
-See the linux documentation on `sys/class/leds` to understand the meaning of trigger, delay, brightness, and other settings.
+See the Linux documentation on `sys/class/leds` to understand the meaning of trigger, delay, brightness, and other settings.
 
 
 ## Limitations, Areas for Improvement
 
-- linux only, requires `/sys/class/leds`
-- most but not all ``/sys/class/leds` features are currently implemented
+- Linux only, requires `/sys/class/leds`
+- most but not all `/sys/class/leds` features are currently implemented
 - tests don't cover keepalive functionality yet

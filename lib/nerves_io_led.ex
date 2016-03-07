@@ -33,7 +33,7 @@ defmodule Nerves.IO.Led do
   end
 
   # if the value of a defined LED is a function, then call the function
-  # with the key/value arguments   Primarly used for testing
+  # with the key/value arguments   Primarily used for testing
   defp write(led_fn, {key, value}) when is_function(led_fn) do
     led_fn.({key, value})
   end
@@ -72,11 +72,11 @@ defmodule Nerves.IO.Led do
 
   Written in such a way that you can call alive from multiple processes,
   and they will overlap - i.e. each call resets the timer to another time
-  period.  If the specified timeout is different, the last timout called
+  period.  If the specified timeout is different, the last timeout called
   is the timeout that is used.   When the timeout expires (with no other
   alive call for that led) the led is extinguished.
 
-  The following example shows turning on an led labelled :activity.  The
+  The following example shows turning on an led labeled :activity.  The
   call must be executed every 2 seconds or more to keep the activity led
   lit:
 
