@@ -4,12 +4,12 @@ defmodule Nerves.IO.Led.Mixfile do
 
   def project, do: [
     app: :nerves_io_led,
-    version: version,
+    version: version(),
     elixir: "~> 1.0",
-    deps: deps,
+    deps: deps(),
     name: "Nerves.IO.Led",
     description: "Functions to drive LEDs on embedded systems",
-    package: package,
+    package: package(),
     docs: [
       source_ref: "v#{version}", main: "Nerves.IO.led",
       source_url: "https://github.com/nerves-project/nerves_io_led",
