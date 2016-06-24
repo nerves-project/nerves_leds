@@ -2,7 +2,9 @@ Nerves.Leds
 ===========
 [![Build Status](https://travis-ci.org/nerves-project/nerves_io_led.svg?branch=master)](https://travis-ci.org/nerves-project/nerves_leds)
 
-Simple API to drive leds exposed by linux's `/sys/class/leds`.
+Simple API to drive leds exposed by linux `/sys/class/leds`.
+Designed for use with [nerves](http://nerves-project.org/),
+but works on any distribution of Linux that supports `/sys/class/leds`.
 
 ## Configuration
 
@@ -59,10 +61,9 @@ config :nerves_leds, states: [
 	blip: [ trigger: "timer", delay_off: 1000, delay_on: 100 ]]
 ```
 
-See the linux documentation on `sys/class/leds` to understand the meaning of
+See the Linux documentation on `sys/class/leds` to understand the meaning of
 trigger, delay, brightness, and other settings.
 
 ## Limitations, Areas for Improvement
 
-- linux only, requires `/sys/class/leds`
 - most but not all ``/sys/class/leds` features are currently implemented

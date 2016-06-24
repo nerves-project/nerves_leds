@@ -16,7 +16,7 @@ defmodule Nerves.Leds.Mixfile do
       docs: [
         source_ref: "v#{@version}", main: "Nerves.Leds",
         source_url: "https://github.com/nerves-project/nerves_leds",
-#        main: "extra-readme",
+#       main: "extra-readme",
         extras: [ "README.md", "CHANGELOG.md"] ]]
   end
 

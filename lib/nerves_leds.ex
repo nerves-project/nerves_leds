@@ -4,6 +4,56 @@ defmodule Nerves.Leds do
   Handles LED blinking/handling in a configurable way, providing an
   easy-to use interface to setting LEDs defined in `/sys/class/leds`.
 
+  While an application could write directly to /sys/class/leds, the main advantage
+  of using this module is to provide a layer of abstraction that allows easily
+  defining application-specific led names and states, like this:
+
+  ```elixir
+  alias Nerves.Leds
+
+  Leds.set power: true                            # turn on the led we called "power"
+  Leds.set power: :slowblink                      # make it blink slowly
+  Leds.set connected: false, alert: :fastblink    # set multiple LED states at once
+  ```
+
+  ## Configuration
+
+  Use config.exs to create a friendly name that maps to an entry in
+  `/sys/class/leds` that make sense for your application. An example for the Alix 2D boards:
+
+  ```elixir
+  # in your app's config/config.exs:
+  config :nerves_leds, names: [
+  	power:     "alix:1",
+  	connected: "alix:2",
+  	alert:     "alix:3"
+  ]
+  ```
+
+  ## Included states
+
+  In addition to `true` (on) and `false` (off) the following atoms provide predefined
+  behaviors:
+
+  - `:slowblink` - turns on and off slowly (about twice a second)
+  - `:fastblink` - turns on and off rapidly (about 7.5 times a second)
+  - `:slowwink` - mostly on, but "winks off" once every second or so
+  - `:hearbeat` - a heartbeat pattern
+
+  ## Customizing states
+
+  The standard LED states are defined as `@predefined_states` near the top of
+  `lib/nerves_leds.ex`. You can change or add to them using config.exs as
+  follows:
+
+  ```elixir
+  config :nerves_leds, states: [
+  	fastblink: [ trigger: "timer", delay_off: 40, delay_on: 30 ],
+  	blip: [ trigger: "timer", delay_off: 1000, delay_on: 100 ]]
+  ```
+
+  See the Linux documentation on `sys/class/leds` to understand the meaning of
+  trigger, delay, brightness, and other settings.
   """
 
   @app :nerves_leds
@@ -23,13 +73,15 @@ defmodule Nerves.Leds do
   @led_states Dict.merge(Application.get_env(@app, :states, []), @predefined_states)
 
   @doc """
-  Set status of one or more leds, like this:
+  Set one or more leds to one of the built-in or user-defined states
 
-  ```
-  Nerves.Leds.set power: true, error: fastblink
-  ```
+  ~~~elixir
+    Nerves.Leds.set power: true, error: fastblink
+  ~~~
 
+  See the module overview for information about states and configuration.
   """
+
   @spec set(Keyword.T) :: true
   def set(settings) do
     Enum.each settings, &(set_keyed_state(&1))
