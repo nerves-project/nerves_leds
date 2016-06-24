@@ -1,5 +1,20 @@
 # Changelog
 
+## v0.7.0 (2016-06-21)
+
+This update reflects a number of changes that bring this module more in line
+with current Nerves and Elixir naming, coding, and license conventions, in
+preparation for pushing to hex. Unfortunately it changes the API, but hey,
+we're still < 1.0, right?
+
+* Breaking API Changes
+  - Renamed project to `nerves_leds` (was `nerves_io_led`)
+  - Module is now Nerves.Leds (was Nerves.Led)
+  - Removed the `alive` functionality (can use `oneshot` trigger instead)
+* Improved code style in places and fixed warnings
+* Improved and fixed bugs in docs
+* Changed LICENSE to Apache 2
+
 ## v0.6.0 (2015-10-04)
 
 * Breaking API Changes
