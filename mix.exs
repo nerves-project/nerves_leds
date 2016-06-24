@@ -9,9 +9,10 @@ defmodule Nerves.Leds.Mixfile do
       version: @version,
       elixir: "~> 1.0",
       deps: deps(),
-      name: "Nerves.Leds",
       description: "Functions to drive LEDs on embedded systems",
       package: package(),
+      name: "Nerves.Leds",
+      description: "Functions to drive LEDs on embedded systems",
       docs: [
         source_ref: "v#{@version}", main: "Nerves.Leds",
         source_url: "https://github.com/nerves-project/nerves_leds",
