@@ -76,7 +76,7 @@ defmodule Nerves.Leds do
   Set one or more leds to one of the built-in or user-defined states
 
   ~~~elixir
-    Nerves.Leds.set power: true, error: fastblink
+    Nerves.Leds.set power: true, error: :fastblink
   ~~~
 
   See the module overview for information about states and configuration.
