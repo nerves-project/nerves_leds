@@ -114,7 +114,7 @@ defmodule Nerves.Leds do
   end
 
   defp raw_state(val) when is_list(val), do: val
-  defp raw_state(val), do: Dict.get @led_states, val
+  defp raw_state(val), do: Dict.get(@led_states, val)
 
   defp raw_led(key) do
     case (Dict.get @led_names, key) do
