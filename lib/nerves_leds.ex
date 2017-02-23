@@ -1,8 +1,7 @@
 defmodule Nerves.Leds do
 
   @moduledoc """
-  Handles LED blinking/handling in a configurable way, providing an
-  easy-to use interface to setting LEDs defined in `/sys/class/leds`.
+  A convenient interface to setting LEDs defined in `/sys/class/leds`.
 
   While an application could write directly to /sys/class/leds, the main advantage
   of using this module is to provide a layer of abstraction that allows easily
@@ -14,19 +13,33 @@ defmodule Nerves.Leds do
   Leds.set power: true                            # turn on the led we called "power"
   Leds.set power: :slowblink                      # make it blink slowly
   Leds.set connected: false, alert: :fastblink    # set multiple LED states at once
+
+  ## alernate syntax via set/2
+
+  Leds.set :power, :slowblink
+
   ```
 
   ## Configuration
 
-  Use config.exs to create a friendly name that maps to an entry in
-  `/sys/class/leds` that make sense for your application. An example for the Alix 2D boards:
+  Use config.exs in your application to create a friendly name that maps to an
+  entry in `/sys/class/leds` that make sense for your application.
+
+  A trivial example for Raspberry Pi:
+
+  ```elixir
+  # in your app's config/config.exs:
+  config :nerves_leds, names: [ red: "led0", green: "led1" ]
+  ```
+
+  A more useful example for the Alix 2D boards implementing a router:
 
   ```elixir
   # in your app's config/config.exs:
   config :nerves_leds, names: [
-  	power:     "alix:1",
-  	connected: "alix:2",
-  	alert:     "alix:3"
+    power:     "alix:1",
+    connected: "alix:2",
+    alert:     "alix:3"
   ]
   ```
 
@@ -69,29 +82,47 @@ defmodule Nerves.Leds do
 
   @sys_leds_path "/sys/class/leds/"
 
-  @led_names  Application.get_env(@app, :names, [])
-  @led_states Dict.merge(Application.get_env(@app, :states, []), @predefined_states)
-
   @doc """
-  Set one or more leds to one of the built-in or user-defined states
+  Set states of one or more LEDs by using their mapped name
 
   ~~~elixir
     Nerves.Leds.set power: true, error: fastblink
   ~~~
-
-  See the module overview for information about states and configuration.
   """
 
-  @spec set(Keyword.T) :: true
+  @spec set(Keyword.t) :: true
   def set(settings) do
-    Enum.each settings, &(set_keyed_state(&1))
+    Enum.each settings, fn({led, state}) ->
+      set(led, state)
+    end
     true
+  end
+
+  @doc """
+  Set the state of a single LED
+
+  ~~~elixir
+  Nerves.Leds.set :power, true
+  Nerves.Leds.set :backlight, brightness: 200
+  ~~~
+
+  Note that unlike set/1, this allows optionally directly naming the file of the led
+  in /sys/class/leds by using a string name rather than an atom.
+
+  ~~~elixir
+  Nerves.Leds.set "led2", [ trigger: "timer", delay_on: 1000, delay_off: 1000 ]
+  ~~~
+  """
+
+  @spec set(atom | binary, atom | Keyword.t) :: true
+  def set(led, state) do
+    set_raw_state raw_led(led), raw_state(state)
   end
 
   ### private ###
 
   defp led_path(led, attribute) do
-    Path.join  @sys_leds_path, "#{led}/#{attribute}"
+    Path.join @sys_leds_path, "#{led}/#{attribute}"
   end
 
   # if the value of a defined LED is a function, then call the function
@@ -104,26 +135,41 @@ defmodule Nerves.Leds do
   end
 
   defp set_raw_state(led, settings) do
-    {trigger, settings} = Dict.pop settings, :trigger, "none"
+    {trigger, settings} = Keyword.pop settings, :trigger, "none"
     write(led, {:trigger, trigger})
     Enum.each settings, &(led |> write(&1))
   end
 
-  defp set_keyed_state({key, val}) do
-     set_raw_state raw_led(key), raw_state(val)
+  # if parameter isn't a list, lookup state from state map or predefined states
+  defp raw_state(val) when is_list(val), do: val
+  defp raw_state(val) when is_integer(val), do: Integer.to_string(val)
+  defp raw_state(val) when is_atom(val) do
+    @app
+    |> Application.get_env(:states, [])
+    |> Keyword.merge(@predefined_states)
+    |> Keyword.get(val)
+    |> case do
+      nil ->
+        raise ArgumentError, "Attempt to set unknown LED state: #{inspect val}"
+      state ->
+        state
+    end
   end
 
-  defp raw_state(val) when is_list(val), do: val
-  defp raw_state(val), do: Dict.get @led_states, val
-
-  defp raw_led(key) do
-    case (Dict.get @led_names, key) do
-        nil ->
-          raise ArgumentError, """
-          Attempt to set unknown led key. Check your led names in config.exs,
-          or maybe you forgot to mix deps.compile leds after change?
-          """
-        led -> led
+  # if parameter isn't a string, lookup led name from configured led name map
+  defp raw_led(key) when is_binary(key), do: key
+  defp raw_led(key) when is_atom(key) do
+    @app
+    |> Application.get_env(:names, [])
+    |> Keyword.get(key)
+    |> case do
+      nil ->
+        raise ArgumentError, """
+        Attempt to set unknown LED key: #{inspect key}.
+        Check your LED names in config.exs.
+        """
+      led ->
+        led
     end
   end
 
