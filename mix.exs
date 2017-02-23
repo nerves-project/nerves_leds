@@ -1,6 +1,6 @@
 defmodule Nerves.Leds.Mixfile do
 
-  @version "0.8.0-dev"
+  @version "0.8.0"
 
   use Mix.Project
 

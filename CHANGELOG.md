@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.8.0-dev (2017-02-22)
+## v0.8.0 (2017-02-22)
 
 * Specifying string for LED name to set function now bypasses name mapping
 * Removed all compile-time config cacheing to avoid deps issues
