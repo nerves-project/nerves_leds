@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.8.0-dev (2017-02-22)
+
+* Specifying string for LED name to set function now bypasses name mapping
+* Removed all compile-time config cacheing to avoid deps issues
+* Now raises ArgumentError for invalid states
+* Added alternate single-LED API form `set/2`
+* Simplified README
+
 ## v0.7.0 (2016-06-21)
 
 This update reflects a number of changes that bring this module more in line

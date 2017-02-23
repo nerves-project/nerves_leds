@@ -1,13 +1,13 @@
 defmodule Nerves.Leds.Mixfile do
 
-  @version "0.7.0"
+  @version "0.8.0-dev"
 
   use Mix.Project
 
   def project do
-    [ app: :nerves_leds,
+    [app: :nerves_leds,
       version: @version,
-      elixir: "~> 1.0",
+      elixir: "~> 1.4",
       deps: deps(),
       description: "Functions to drive LEDs on embedded systems",
       package: package(),
@@ -16,8 +16,7 @@ defmodule Nerves.Leds.Mixfile do
       docs: [
         source_ref: "v#{@version}", main: "Nerves.Leds",
         source_url: "https://github.com/nerves-project/nerves_leds",
-#       main: "extra-readme",
-        extras: [ "README.md", "CHANGELOG.md"] ]]
+        extras: ["README.md", "CHANGELOG.md"]]]
   end
 
   def application do
@@ -29,10 +28,10 @@ defmodule Nerves.Leds.Mixfile do
   end
 
   defp package do
-    [ maintainers: ["Garth Hitchens", "Chris Dutton"],
+    [maintainers: ["Garth Hitchens", "Chris Dutton"],
       licenses: ["MIT"],
       links: %{github: "https://github.com/nerves-project/nerves_leds"},
-      files: ~w(lib config) ++ ~w(README.md CHANGELOG.md LICENSE mix.exs) ]
+      files: ~w(lib config) ++ ~w(README.md CHANGELOG.md LICENSE mix.exs)]
   end
 
 end

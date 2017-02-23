@@ -29,6 +29,13 @@ defmodule Nerves.Leds.Test do
     assert led(:delay_off) == 100
   end
 
+  test "test single LED api" do
+    Leds.set :test_led, brightness: 202, trigger: "none", delay_on: 500
+    assert led(:trigger) == "none"
+    assert led(:delay_on) == 500
+    assert led(:brightness) == 202
+  end
+
   test "custom state map" do
     Leds.set test_led: :test_state
     assert led(:foo) == 3
