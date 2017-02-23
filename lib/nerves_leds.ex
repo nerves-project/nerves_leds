@@ -86,7 +86,7 @@ defmodule Nerves.Leds do
   Set states of one or more LEDs by using their mapped name
 
   ~~~elixir
-    Nerves.Leds.set power: true, error: fastblink
+    Nerves.Leds.set power: true, error: :fastblink
   ~~~
   """
 
@@ -172,5 +172,4 @@ defmodule Nerves.Leds do
         led
     end
   end
-
 end
