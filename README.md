@@ -1,7 +1,7 @@
 Nerves.Leds
 ===========
-[![Build Status](https://travis-ci.org/nerves-project/nerves_io_led.svg?branch=master)](https://travis-ci.org/nerves-project/nerves_leds)
-[![Hex version](https://img.shields.io/hexpm/v/nerves_leds.svg "Hex version")](https://hex.pm/packages/nerves_uart) [![Ebert](https://ebertapp.io/github/nerves-project/nerves_leds.svg)](https://ebertapp.io/github/nerves-project/nerves_leds)
+[![Build Status](https://travis-ci.org/nerves-project/nerves_leds.svg?branch=master)](https://travis-ci.org/nerves-project/nerves_leds)
+[![Hex version](https://img.shields.io/hexpm/v/nerves_leds.svg "Hex version")](https://hex.pm/packages/nerves_leds) [![Ebert](https://ebertapp.io/github/nerves-project/nerves_leds.svg)](https://ebertapp.io/github/nerves-project/nerves_leds)
 
 Simple API to drive leds exposed by linux `/sys/class/leds`.  Designed for use with [Nerves](http://nerves-project.org/), but works on any distribution of Linux with `/sys/class/leds`.
 
