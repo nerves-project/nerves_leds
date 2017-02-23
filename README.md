@@ -13,7 +13,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
   ```elixir
   def deps do
-    [{:nerves_leds, "~> 0.1.1"}]
+    [{:nerves_leds, "~> 0.8.0"}]
   end
   ```
 
