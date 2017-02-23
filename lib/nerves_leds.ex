@@ -72,12 +72,12 @@ defmodule Nerves.Leds do
   @app :nerves_leds
 
   @predefined_states [
-    true:  [ brightness: 1 ],
-    false: [ brightness: 0 ],
-    slowblink: [ trigger: "timer", delay_off: 250, delay_on: 250 ],
-    fastblink: [ trigger: "timer", delay_off: 80, delay_on: 50 ],
-    slowwink:  [ trigger: "timer", delay_on: 1000, delay_off: 100 ],
-    heartbeat: [ trigger: "heartbeat" ]
+    true:  [brightness: 1],
+    false: [brightness: 0],
+    slowblink: [trigger: "timer", delay_off: 250, delay_on: 250],
+    fastblink: [trigger: "timer", delay_off: 80, delay_on: 50],
+    slowwink:  [trigger: "timer", delay_on: 1000, delay_off: 100],
+    heartbeat: [trigger: "heartbeat"]
   ]
 
   @sys_leds_path "/sys/class/leds/"
@@ -137,7 +137,7 @@ defmodule Nerves.Leds do
   defp set_raw_state(led, settings) do
     {trigger, settings} = Keyword.pop settings, :trigger, "none"
     write(led, {:trigger, trigger})
-    Enum.each settings, &(led |> write(&1))
+    Enum.each settings, &(write(led, &1))
   end
 
   # if parameter isn't a list, lookup state from state map or predefined states
