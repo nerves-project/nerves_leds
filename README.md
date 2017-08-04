@@ -17,15 +17,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
   end
   ```
 
-  2. List `:nerves_leds` as an application dependency:
-
-  ```elixir
-  def application do
-    [applications: [:nerves_leds]]
-  end
-  ```
-
-  4. Run `mix deps.get` and `mix compile`
+  2. Run `mix deps.get` and `mix compile`
 
 
 ### Configuration & Usage
@@ -44,7 +36,7 @@ alias Nerves.Leds
 
 Leds.set connect: true
 Leds.set connect: :heartbeat
-Leds.set connect: false, error: :slowlbink
+Leds.set connect: false, error: :slowblink
 ```
 
 You can also define your own states:
