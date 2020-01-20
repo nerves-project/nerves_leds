@@ -51,7 +51,7 @@ defmodule Nerves.Leds do
   - `:slowblink` - turns on and off slowly (about twice a second)
   - `:fastblink` - turns on and off rapidly (about 7.5 times a second)
   - `:slowwink` - mostly on, but "winks off" once every second or so
-  - `:hearbeat` - a heartbeat pattern
+  - `:heartbeat` - a heartbeat pattern
 
   ## Customizing states
 
