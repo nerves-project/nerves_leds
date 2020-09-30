@@ -83,6 +83,20 @@ defmodule Nerves.Leds do
   @sys_leds_path "/sys/class/leds/"
 
   @doc """
+  Enumerate all the LEDs on this device.
+  If the device has no LEDs or doesn't support the Linux LED interface,
+  an empty list is returned.
+  """
+
+  @spec enumerate() :: [binary]
+  def enumerate() do
+    case File.ls(@sys_leds_path) do
+      {:ok, leds} -> leds
+      _ -> []
+    end
+  end
+
+  @doc """
   Set states of one or more LEDs by using their mapped name
 
   ~~~elixir

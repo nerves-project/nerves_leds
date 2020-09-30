@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Adds `enumerate` method for getting a list of available LEDs.
+
 ## v0.8.0 (2017-02-22)
 
 * Specifying string for LED name to set function now bypasses name mapping

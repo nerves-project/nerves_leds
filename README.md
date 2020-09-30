@@ -48,6 +48,13 @@ config :nerves_leds, states: [
 	blip: [ trigger: "timer", delay_off: 1000, delay_on: 100 ]]
 ```
 
+For situations where the number of LEDs are not known at compile time, you
+can enumerate the LEDs:
+
+```elixir
+Leds.enumerate
+```
+
 ### More Details
 
 See the [documentation](https://hexdocs.pm/nerves_leds) for the full description of the API and configuration.
