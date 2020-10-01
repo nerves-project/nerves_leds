@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.8.1 (2020-10-01)
 
 * Adds `enumerate` method for getting a list of available LEDs.
 

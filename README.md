@@ -11,7 +11,7 @@ Add `nerves_leds` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:nerves_leds, "~> 0.8.0"}]
+  [{:nerves_leds, "~> 0.8.1"}]
 end
 ```
 
