@@ -1,7 +1,8 @@
-defmodule Nerves.Leds.Mixfile do
-  @version "0.8.0"
-
+defmodule Nerves.Leds.MixProject do
   use Mix.Project
+
+  @version "0.8.0"
+  @source_url "https://github.com/nerves-project/nerves_leds"
 
   def project do
     [
@@ -9,16 +10,14 @@ defmodule Nerves.Leds.Mixfile do
       version: @version,
       elixir: "~> 1.4",
       deps: deps(),
-      description: "Functions to drive LEDs on embedded systems",
       package: package(),
-      name: "Nerves.Leds",
-      description: "Functions to drive LEDs on embedded systems",
-      docs: [
-        source_ref: "v#{@version}",
-        main: "Nerves.Leds",
-        source_url: "https://github.com/nerves-project/nerves_leds",
-        extras: ["README.md", "CHANGELOG.md"]
-      ]
+      description: description(),
+      docs: docs(),
+      preferred_cli_env: %{
+        docs: :docs,
+        "hex.publish": :docs,
+        "hex.build": :docs
+      }
     ]
   end
 
@@ -26,16 +25,28 @@ defmodule Nerves.Leds.Mixfile do
     []
   end
 
+  defp description do
+    "Functions to drive LEDs on embedded systems"
+  end
+
   defp deps do
-    [{:ex_doc, "~> 0.11", only: :dev}]
+    [{:ex_doc, "~> 0.22", only: :docs, runtime: false}]
   end
 
   defp package do
     [
-      maintainers: ["Garth Hitchens", "Chris Dutton"],
+      files: ~w(lib config) ++ ~w(README.md CHANGELOG.md LICENSE mix.exs),
       licenses: ["MIT"],
-      links: %{github: "https://github.com/nerves-project/nerves_leds"},
-      files: ~w(lib config) ++ ~w(README.md CHANGELOG.md LICENSE mix.exs)
+      links: %{"GitHub" => @source_url}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "Nerves.Leds",
+      extras: ["README.md", "CHANGELOG.md"],
+      source_ref: "v#{@version}",
+      source_url: @source_url
     ]
   end
 end
