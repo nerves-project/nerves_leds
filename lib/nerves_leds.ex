@@ -1,5 +1,4 @@
 defmodule Nerves.Leds do
-
   @moduledoc """
   A convenient interface to setting LEDs defined in `/sys/class/leds`.
 
@@ -14,7 +13,7 @@ defmodule Nerves.Leds do
   Leds.set power: :slowblink                      # make it blink slowly
   Leds.set connected: false, alert: :fastblink    # set multiple LED states at once
 
-  ## alernate syntax via set/2
+  ## alternate syntax via set/2
 
   Leds.set :power, :slowblink
 
@@ -72,11 +71,11 @@ defmodule Nerves.Leds do
   @app :nerves_leds
 
   @predefined_states [
-    true:  [brightness: 1],
+    true: [brightness: 1],
     false: [brightness: 0],
     slowblink: [trigger: "timer", delay_off: 250, delay_on: 250],
     fastblink: [trigger: "timer", delay_off: 80, delay_on: 50],
-    slowwink:  [trigger: "timer", delay_on: 1000, delay_off: 100],
+    slowwink: [trigger: "timer", delay_on: 1000, delay_off: 100],
     heartbeat: [trigger: "heartbeat"]
   ]
 
@@ -104,11 +103,12 @@ defmodule Nerves.Leds do
   ~~~
   """
 
-  @spec set(Keyword.t) :: true
+  @spec set(Keyword.t()) :: true
   def set(settings) do
-    Enum.each settings, fn({led, state}) ->
+    Enum.each(settings, fn {led, state} ->
       set(led, state)
-    end
+    end)
+
     true
   end
 
@@ -128,35 +128,37 @@ defmodule Nerves.Leds do
   ~~~
   """
 
-  @spec set(atom | binary, atom | Keyword.t) :: true
+  @spec set(atom | binary, atom | Keyword.t()) :: :ok
   def set(led, state) do
-    set_raw_state raw_led(led), raw_state(state)
+    set_raw_state(raw_led(led), raw_state(state))
   end
 
   ### private ###
 
   defp led_path(led, attribute) do
-    Path.join @sys_leds_path, "#{led}/#{attribute}"
+    Path.join(@sys_leds_path, "#{led}/#{attribute}")
   end
 
   # if the value of a defined LED is a function, then call the function
-  # with the key/value arguments Primarly used for testing
+  # with the key/value arguments Primarily used for testing
   defp write(led_fn, {key, value}) when is_function(led_fn) do
     led_fn.({key, value})
   end
+
   defp write(led, {key, value}) when is_binary(led) do
     File.write(led_path(led, key), to_string(value))
   end
 
   defp set_raw_state(led, settings) do
-    {trigger, settings} = Keyword.pop settings, :trigger, "none"
+    {trigger, settings} = Keyword.pop(settings, :trigger, "none")
     write(led, {:trigger, trigger})
-    Enum.each settings, &(write(led, &1))
+    Enum.each(settings, &write(led, &1))
   end
 
   # if parameter isn't a list, lookup state from state map or predefined states
   defp raw_state(val) when is_list(val), do: val
   defp raw_state(val) when is_integer(val), do: Integer.to_string(val)
+
   defp raw_state(val) when is_atom(val) do
     @app
     |> Application.get_env(:states, [])
@@ -164,7 +166,8 @@ defmodule Nerves.Leds do
     |> Keyword.get(val)
     |> case do
       nil ->
-        raise ArgumentError, "Attempt to set unknown LED state: #{inspect val}"
+        raise ArgumentError, "Attempt to set unknown LED state: #{inspect(val)}"
+
       state ->
         state
     end
@@ -172,6 +175,7 @@ defmodule Nerves.Leds do
 
   # if parameter isn't a string, lookup led name from configured led name map
   defp raw_led(key) when is_binary(key), do: key
+
   defp raw_led(key) when is_atom(key) do
     @app
     |> Application.get_env(:names, [])
@@ -179,9 +183,10 @@ defmodule Nerves.Leds do
     |> case do
       nil ->
         raise ArgumentError, """
-        Attempt to set unknown LED key: #{inspect key}.
+        Attempt to set unknown LED key: #{inspect(key)}.
         Check your LED names in config.exs.
         """
+
       led ->
         led
     end
