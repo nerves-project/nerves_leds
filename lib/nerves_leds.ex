@@ -157,7 +157,6 @@ defmodule Nerves.Leds do
 
   # if parameter isn't a list, lookup state from state map or predefined states
   defp raw_state(val) when is_list(val), do: val
-  defp raw_state(val) when is_integer(val), do: Integer.to_string(val)
 
   defp raw_state(val) when is_atom(val) do
     @app
