@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.org/nerves-project/nerves_leds.svg?branch=master)](https://travis-ci.org/nerves-project/nerves_leds)
 [![Hex version](https://img.shields.io/hexpm/v/nerves_leds.svg "Hex version")](https://hex.pm/packages/nerves_leds)
 
+# This project hasn't been maintained in a long time. Either try writing directly to "/sys/class/leds" or see https://github.com/smartrent/delux for a possible replacement.
+
 Simple API to drive leds exposed by linux `/sys/class/leds`.  Designed for use with [Nerves](http://nerves-project.org/), but works on any distribution of Linux with `/sys/class/leds`.
 
 ## Installation
